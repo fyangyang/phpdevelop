@@ -1,0 +1,59 @@
+version : '2.1'
+services :
+  mysql :
+    build :
+      context : ./mysql
+      dockerfile : dockerfile
+    ports :
+    - "${MYSQL_PORT}:3306"
+    volumes :
+    - ./mysql/data:/var/lib/mysql
+    #初始密码
+    environment :
+    - MYSQL_USER=${MYSQL_USER}
+    - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+
+    container_name : mysql
+    restart : always
+  php :
+    build :
+      context : ./php
+      dockerfile : dockerfile
+      args:
+        - WEEDS_PHP_VERSION=${PHP_VERSION}
+    ports :
+    - "9000:9000"
+    volumes :
+    - ${WORKPLACE}:/usr/local/nginx/html
+    - ./php/conf/php${PHP_VERSION}.ini:/usr/local/php/lib/php.ini:ro
+    container_name : php
+    external_links :
+    - mysql
+    restart : always
+  nginx :
+    build :
+      context : ./nginx
+      dockerfile : dockerfile
+    ports :
+    - "${NGINX_HOST_HTTP_PORT}:80"
+    - "${NGINX_HOST_HTTPS_PORT}:443"
+    volumes :
+    - ./nginx/logs:/usr/local/nginx/logs
+    - ${WORKPLACE}:/usr/local/nginx/html
+    - ./nginx/conf/nginx.conf:/usr/local/nginx/conf/nginx.conf:ro
+    - ./nginx/conf/vhost:/usr/local/nginx/conf/vhost:ro
+    container_name : nginx
+    external_links :
+    - php
+    restart : always
+  redis :
+    image : redis
+    container_name : redis
+    volumes :
+    - ./redis/data:/data
+    - ./redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
+    ports :
+    - ${REDIS_PORT}:6379
+    command : redis-server /usr/local/etc/redis/redis.conf
+    restart: always

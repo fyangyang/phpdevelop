@@ -1,0 +1,7 @@
+mysql/data
+nginx/conf/vhost/ft.conf
+nginx/logs/error.log
+nginx/logs/access.log
+nginx/logs/nginx.pid
+redis/data
+.env

@@ -1,0 +1,19 @@
+### PHP #################################################
+# php版本 5.6.37，7.1.21，7.2.9，
+PHP_VERSION=7.1.21
+# 项目目录
+WORKPLACE=./www/
+
+### NGINX #################################################
+NGINX_HOST_HTTP_PORT=80 
+NGINX_HOST_HTTPS_PORT=443
+
+### MYSQL #################################################
+# 修改了数据库密码记得删除原来mysql->dada，重新生成
+MYSQL_USER=weeds
+MYSQL_PASSWORD=123456
+MYSQL_PORT=3306
+MYSQL_ROOT_PASSWORD=weeds
+
+### REDIS #################################################
+REDIS_PORT=6379
